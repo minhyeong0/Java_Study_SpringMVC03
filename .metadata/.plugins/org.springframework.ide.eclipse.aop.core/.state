@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop-reference-model>
+<aop-project name="SpringMVC11"/>
+<aop-project name="SpringMVC12"/>
+<aop-project name="SpringMVC13"/>
+</aop-reference-model>
