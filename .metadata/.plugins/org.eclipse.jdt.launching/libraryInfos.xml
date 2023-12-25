@@ -19,4 +19,6 @@
             <entry path="F:\Programming\Java\Study\StudyMVC3\bin\jdk8u242-b08\jre\lib\endorsed"/>
         </endorsedDirs>
     </libraryInfo>
+    <libraryInfo home="F:\Programming\Java\Study\StudyMVC3\bin\jdk-17.0.9" version="17.0.9"/>
+    <libraryInfo home="F:\Programming\Java\Study\StudyMVC3\bin\jdk-17.0.9\bin" version="17.0.9"/>
 </libraryInfos>
