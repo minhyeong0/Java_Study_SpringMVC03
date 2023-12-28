@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.bit.entity.Board;
 import kr.bit.service.BoardService;
@@ -33,6 +34,24 @@ public class BoardController {
 	@PostMapping("/register")
 	public String register(Board vo) {
 		boardService.register(vo);
+		return "redirect:/list";
+	}
+	
+	@GetMapping("/get")
+	public @ResponseBody Board get(Long idx) {
+		Board vo = boardService.get(idx);
+		return vo;
+	}
+	
+	@GetMapping("/remove")
+	public String remove(Long idx) {
+		boardService.delete(idx);
+		return "redirect:/list";
+	}
+	
+	@PostMapping("/modify")
+	public String modify(Board vo) {
+		boardService.update(vo);
 		return "redirect:/list";
 	}
 }
