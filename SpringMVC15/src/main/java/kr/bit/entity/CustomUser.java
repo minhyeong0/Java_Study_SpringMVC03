@@ -4,6 +4,9 @@ package kr.bit.entity;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 
+import lombok.Data;
+
+@Data
 public class CustomUser extends User{
 	//회원정보에서 username, password, role를 UserDetails를 상속받은
 	//User에게 전달해주는 클래스

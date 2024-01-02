@@ -20,5 +20,5 @@ public class Member {
 	@Enumerated(EnumType.STRING) //DB에 열거형 타입 String으로 선언함
 	private Role role;           //회원권한
 	
-	private String enabled;      //회원등록
+	private boolean enabled;      //회원등록
 }

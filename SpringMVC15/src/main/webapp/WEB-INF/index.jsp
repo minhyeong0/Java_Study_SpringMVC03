@@ -34,9 +34,7 @@
 			     	 </p>
 			     </div>
 			   </div>
-	     </div>
-	     <div class="card-group">
-			   <div class="card bg-danger">
+ 			   <div class="card bg-danger">
 			     <div class="card-body text-center">
 			     	 <p class="card-text">
 			     	 	 <a href="${cpath}/member/login">로그인</a>

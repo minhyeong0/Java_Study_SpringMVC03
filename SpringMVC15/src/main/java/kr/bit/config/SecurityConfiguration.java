@@ -5,13 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import jakarta.servlet.DispatcherType;
 
 @Configuration //스프링 컨테이너 설정파일이라고 메모리에 올림
-@EnableWebSecurity
 public class SecurityConfiguration {
 	
 	@Autowired
@@ -25,14 +24,14 @@ public class SecurityConfiguration {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		
 		http.csrf(csrfConfig ->
             csrfConfig.disable()
         )
-        .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-    		.requestMatchers("/", "/member/**").permitAll()
-    		.requestMatchers("/board/**").authenticated()
-        )
+		.authorizeHttpRequests (authorizeRequests -> authorizeRequests
+			.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+			.requestMatchers("/", "/member/**", "/resources/**").permitAll()
+			.requestMatchers("/board/**").authenticated()
+		)	
         .formLogin(login -> login
             .loginPage("/member/login")
             .defaultSuccessUrl("/board/list")

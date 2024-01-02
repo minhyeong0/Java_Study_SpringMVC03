@@ -14,6 +14,7 @@ import kr.bit.entity.Board;
 import kr.bit.service.BoardService;
 
 @Controller
+@RequestMapping("/board/*")
 public class BoardController {
 
 	@Autowired
@@ -23,18 +24,18 @@ public class BoardController {
 	public String list(Model model) {
 		List<Board> list = boardService.getList();
 		model.addAttribute("list", list);
-		return "list"; // WEB-INF/m14/list.jsp
+		return "board/list"; // WEB-INF/m14/list.jsp
 	}
 	
 	@GetMapping("/register")
 	public String register() {
-		return "register"; // WEB-INF/m14/register.jsp
+		return "/board/register"; // WEB-INF/m14/register.jsp
 	}
 	
 	@PostMapping("/register")
 	public String register(Board vo) {
 		boardService.register(vo);
-		return "redirect:/list";
+		return "redirect:/board/list";
 	}
 	
 	@GetMapping("/get")
@@ -46,12 +47,12 @@ public class BoardController {
 	@GetMapping("/remove")
 	public String remove(Long idx) {
 		boardService.delete(idx);
-		return "redirect:/list";
+		return "redirect:/board/list";
 	}
 	
 	@PostMapping("/modify")
 	public String modify(Board vo) {
 		boardService.update(vo);
-		return "redirect:/list";
+		return "redirect:/board/list";
 	}
 }
