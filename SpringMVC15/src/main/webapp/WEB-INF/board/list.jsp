@@ -4,6 +4,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<c:set var="user" value="${SPRING_SECURITY_CONTEXT.authentication.principal}"/>
+<c:set var="auth" value="${SPRING_SECURITY_CONTEXT.authentication.authorities}"/>
 <c:set var="cpath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,6 +20,11 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript">
   	$(document).ready(()=>{
+  		console.log('${user}');
+  		console.log('${user.username}');
+  		console.log('${user.member.username}');
+  		console.log('${auth[0]}');
+  		
   		let regForm = $('#regForm');
   		$('button').on('click', function(e){
   			let oper = $(this).data('oper');
@@ -62,7 +69,14 @@
   			regForm.find('input').attr('readonly', true);
   			regForm.find('textarea').attr('readonly', true);
   			$('#regDiv').css('display', 'none');
-  			$('#updateDiv').css('display', 'block');
+ 				$('#updateDiv').css('display', 'block');
+  			if ('${user.username}' == vo.writer) {
+  				$('button[data-oper="updateForm"]').attr('disabled', false);
+  				$('button[data-oper="remove"]').attr('disabled', false);
+  			} else {
+  				$('button[data-oper="updateForm"]').attr('disabled', true);
+  				$('button[data-oper="remove"]').attr('disabled', true);
+  			}
   		}
   		
   		function goUpdate() {
@@ -161,10 +175,10 @@
 	  						</div>
 	  						<div id="updateDiv" style="display: none;">
 	  							<button type="button" data-oper="list" class="btn btn-sm btn-primary">목록</button>
-	  							<span id="update">
-	  								<button type="button" data-oper="updateForm" class="btn btn-sm btn-warning">수정</button>
-  								</span>
-	  							<button type="button" data-oper="remove" class="btn btn-sm btn-success">삭제</button>
+		  							<span id="update">
+		  								<button type="button" data-oper="updateForm" class="btn btn-sm btn-warning">수정</button>
+	  								</span>
+		  							<button type="button" data-oper="remove" class="btn btn-sm btn-success">삭제</button>
 	  						</div>
 	  					</form>
 	  				</div>

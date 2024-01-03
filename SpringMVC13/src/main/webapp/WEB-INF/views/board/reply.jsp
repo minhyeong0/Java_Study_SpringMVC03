@@ -14,24 +14,24 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript">
-	$(document).ready(()=>{
-		$('button').on('click', function(e){
-		let formData = $('#frm');
-		let btn = $(this).data('btn');
-		if(btn == 'reply'){
-			formData.attr('action', '${cpath}/board/reply');
-		} else if(btn == 'reset') {
-			formData[0].reset();
-			return;
-		} else if(btn == 'list'){
-			let formData1 = $('#frm1');
-			formData1.attr('action', '${cpath}/board/list');
-			formData1.submit();
-			return;
-		} 
-		formData.submit();
+		$(document).ready(()=>{
+			$('button').on('click', function(e){
+			let formData = $('#frm');
+			let btn = $(this).data('btn');
+			if(btn == 'reply'){
+				formData.attr('action', '${cpath}/board/reply');
+			} else if(btn == 'reset') {
+				formData[0].reset();
+				return;
+			} else if(btn == 'list'){
+				let formData1 = $('#frm1');
+				formData1.attr('action', '${cpath}/board/list');
+				formData1.submit();
+				return;
+			} 
+			formData.submit();
+			});
 		});
-	});
 </script>
 </head>
 <body>

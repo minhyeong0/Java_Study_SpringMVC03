@@ -5,4 +5,5 @@
 <aop-project name="SpringMVC13"/>
 <aop-project name="SpringMVC14"/>
 <aop-project name="SpringMVC15"/>
+<aop-project name="SpringMVC16"/>
 </aop-reference-model>
