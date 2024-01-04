@@ -38,11 +38,12 @@
 			<div class="card-body">
 				<p class="card-text">MAP VIEW</p>
 				<div class="input-group mb-3">
-					<input type="text" class="form-control" placeholder="Search">
+					<input type="text" class="form-control" id="address" placeholder="Search">
 					<div class="input-group-append">
-						<button type="button" class="btn btn-secondary">GO</button>
+						<button type="button" class="btn btn-secondary" id="mapBtn">GO</button>
 					</div>
 				</div>
+				<div id="map" style="width:100%;height:150px;"></div>
 			</div>		
 		</div>
 	</div>

@@ -8,12 +8,17 @@
 	<div class="card-body">
 		<h4>Book Search</h4>
 		<div class="input-group mb-3">
-			<input type="text" class="form-control" placeholder="Search">
+			<input type="text" class="form-control" id="bookname" placeholder="Search">
 			<div class="input-group-append">
-				<button type="button" class="btn btn-secondary">GO</button>
+				<a type="button" class="btn btn-secondary" id="search">GO</a>
 			</div>
 		</div>
-		<div id="bookList">
+		<div class="loading-progress" style="display: none;">
+			<div class="spinner-border text-secondary" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+		<div id="bookList" style="overflow: scroll; height: 500px; padding: 10px;">
 			<p>검색된 책 목록 출력</p>
 		</div>
 	</div>

@@ -14,9 +14,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
   <link rel="stylesheet" href="${cpath}/resources/css/style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-  
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=JavaScript KEY"></script>
   <script type="text/javascript">
   	$(document).ready(()=>{
   		let result = '${result}';
@@ -46,6 +47,68 @@
   			pageFrm.submit();
   		});
   		
+ 	  	//책 검색 버튼이 클릭되었을 때
+ 	  	$('#search').click(function(e){
+ 	  		let bookname = $('#bookname').val();
+				if (bookname == '') {
+					alert('책 제목을 입력하세요');
+					return false;
+				}
+				
+				//Kakao book API
+				//REST_API_KEY : Kakao Developers site에서 발급받기
+				//GET : https://dapi.kakao.com/v3/search/book?target=title
+				//HEADER : Authorization: KakaoAK ${REST_API_KEY}
+				$.ajax({
+					url      : 'https://dapi.kakao.com/v3/search/book?target=title',
+					headers  : {'Authorization' : 'KakaoAK REST_API_KEY'},
+					type     : 'get',
+					data     : {'query' : bookname},
+					dataType : 'json',
+					success  : bookPrint,
+					error    : () => alert('error')
+				});
+				$(document).ajaxStart(() => $('.loading-progress').show());
+				$(document).ajaxStop(() => $('.loading-progress').hide());;
+ 	  	});
+ 	  	
+ 	  	//input box에 책제목이 입력되면 자동으로 검색
+ 	  	$('#bookname').autocomplete({
+ 	  		source : () => {
+ 	  			let bookname = $('#bookname').val();
+					$.ajax({
+						url      : 'https://dapi.kakao.com/v3/search/book?target=title',
+						headers  : {'Authorization' : 'KakaoAK REST_API_KEY'},
+						type     : 'get',
+						data     : {'query' : bookname},
+						dataType : 'json',
+						success  : bookPrint,
+						error    : () => alert('error')
+					});
+					$(document).ajaxStart(() => $('.loading-progress').show());
+					$(document).ajaxStop(() => $('.loading-progress').hide());;
+ 	  		},
+ 	  		minLength : 1
+ 	  	});
+ 	  	
+ 	  	//지도 mapBtn 클릭시 지도가 보이도록 설정
+ 	  	$('#mapBtn').click(function(){
+ 	  		let address = $('#address').val();
+ 	  		if (address == '') {
+ 	  			alert('주소를 입력하세요');
+ 	  			return false;
+ 	  		}
+				$.ajax({
+					url      : 'https://dapi.kakao.com/v2/local/search/address.json',
+					headers  : {'Authorization' : 'KakaoAK REST_API_KEY'},
+					type     : 'get',
+					data     : {'query' : address},
+					dataType : 'json',
+					success  : mapView,
+					error    : () => alert('error')
+				});
+ 	  	});
+ 	  	
   	});
   	
   	let checkModal = (result)=>{
@@ -59,6 +122,70 @@
   	function goMsg(){
   		alert("삭제된 게시물입니다.");
   	}
+  	
+  	function bookPrint(data){
+  		let blist = '<table class="table table-hover">';
+  		blist += '<thead>';
+  		blist += '<tr>';
+  		blist += '<th>책이미지</th>';
+  		blist += '<th>책가격</th>';
+  		blist += '</tr>';
+  		blist += '</thead>';
+  		blist += '<tbody>';
+  		$.each(data.documents, (index, obj)=>{
+  			let imgage = obj.thumbnail;
+  			let price = obj.price;
+  			let url = obj.url;
+  			blist += '<tr>';
+  			blist += '<td><a href="' + url + '"><img src="' + imgage + '" width="50px" height="60px"/></a></td>';
+  			blist += '<td>'+ price +'</td>';
+  			blist += '</tr>';
+  		});
+  		blist += '</tbody>';
+  		blist += '</table>';
+  		$('#bookList').html(blist);
+  		
+  	}
+  	
+		function mapView(data) {
+			let x = data.documents[0].x; //경도
+			let y = data.documents[0].y; //위도
+			let mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		    mapOption = { 
+		        center: new kakao.maps.LatLng(y, x), // 지도의 중심좌표
+		        level: 2 // 지도의 확대 레벨
+		    };
+
+			// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+			let map = new kakao.maps.Map(mapContainer, mapOption);
+			
+			// 마커가 표시될 위치입니다 
+			let markerPosition  = new kakao.maps.LatLng(y, x); 
+
+			// 마커를 생성합니다
+			let marker = new kakao.maps.Marker({
+			    position: markerPosition
+			});
+
+			// 마커가 지도 위에 표시되도록 설정합니다
+			marker.setMap(map);
+			
+			// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+			let iwContent = '<div style="padding:5px;">${mvo.memName}</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+			    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+			// 인포윈도우를 생성합니다
+			let infowindow = new kakao.maps.InfoWindow({
+			    content : iwContent,
+			    removable : iwRemoveable
+			});
+
+			// 마커에 클릭이벤트를 등록합니다
+			kakao.maps.event.addListener(marker, 'click', function() {
+			      // 마커 위에 인포윈도우를 표시합니다
+			      infowindow.open(map, marker);  
+			});
+		}
   </script>
 </head>
 <body> 
@@ -185,8 +312,8 @@
 					    <!-- Modal content-->
 					    <div class="modal-content">
 					      <div class="modal-header">
+					        <h4 class="modal-title">MESSAGE</h4>
 					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title">글등록</h4>
 					      </div>
 					      <div class="modal-body">
 					      </div>
